@@ -480,12 +480,13 @@ class OAuth2ServiceAccountClient(_BaseOAuth2ServiceAccountClient):
         # pylint: disable=protected-access
         return ServiceAccountCredentials._from_p12_keyfile_contents(
             self._client_id, self._private_key,
-            private_key_password=self._password, scopes=DEFAULT_SCOPE)
+            private_key_password=self._password, scopes=DEFAULT_SCOPE,
+            token_uri=self.token_uri)
         # pylint: enable=protected-access
       else:
         return SignedJwtAssertionCredentials(
             self._client_id, self._private_key, scope=DEFAULT_SCOPE,
-            private_key_password=self._password)
+            private_key_password=self._password, token_uri=self.token_uri)
     else:
       raise MissingDependencyError(
           'Service account authentication requires PyOpenSSL. Please install '
@@ -533,14 +534,14 @@ class OAuth2JsonServiceAccountClient(_BaseOAuth2ServiceAccountClient):
     # which in turn means amending oauth2client to support them.
     if OAUTH2CLIENT_V2:
       return ServiceAccountCredentials.from_json_keyfile_dict(
-          self._json_key_dict, scopes=[DEFAULT_SCOPE])
+          self._json_key_dict, scopes=[DEFAULT_SCOPE], token_uri=self.token_uri)
     else:
       return ServiceAccountCredentials(
           service_account_id=self._client_id,
           service_account_email=self._service_account_email,
           private_key_id=self._private_key_id,
           private_key_pkcs8_text=self._private_key_pkcs8_text,
-          scopes=[DEFAULT_SCOPE])
+          scopes=[DEFAULT_SCOPE], token_uri=self.token_uri)
     # TODO: Need to plumb user agent through here.
 
 
