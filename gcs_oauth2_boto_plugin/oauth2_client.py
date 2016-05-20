@@ -75,7 +75,7 @@ META_HEADERS = {
 
 # The following implements cross-compatibility with versions of oauth2client.
 # oauth2client 2.0.0 introduced major backwards-incompatibility changes,
-# so we it's possible that consumers of this library may be pinned to an
+# and it's possible that consumers of this library may be pinned to an
 # old version such as 1.5.2. This can be removed after clients update
 # and the dependency of this library is upgraded to >= 2.0.0.
 OAUTH2CLIENT_V2 = False
