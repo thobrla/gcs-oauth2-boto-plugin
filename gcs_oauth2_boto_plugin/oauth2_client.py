@@ -56,6 +56,9 @@ from retry_decorator.retry_decorator import retry as Retry
 import socks
 
 
+from six import BytesIO
+
+
 LOG = logging.getLogger('oauth2_client')
 
 # Lock used for checking/exchanging refresh token, so multithreaded
@@ -475,11 +478,9 @@ class OAuth2ServiceAccountClient(_BaseOAuth2ServiceAccountClient):
       if OAUTH2CLIENT_V2:
         # TODO: Plumb through auth_uri and token_uri support,
         # which in turn means amending oauth2client to support them.
-        # We use _from_p12_keyfile_contents to avoid reading the key file
-        # again unnecessarily.
         # pylint: disable=protected-access
-        return ServiceAccountCredentials._from_p12_keyfile_contents(
-            self._client_id, self._private_key,
+        return ServiceAccountCredentials.from_p12_keyfile_buffer(
+            self._client_id, BytesIO(self._private_key),
             private_key_password=self._password, scopes=DEFAULT_SCOPE,
             token_uri=self.token_uri)
         # pylint: enable=protected-access
